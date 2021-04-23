@@ -6,7 +6,7 @@ class Molecule {
     this.radius = 6; //set radius
     this.color = color(0,255,0); //default colour
     this.index = i; //index of molecule
-
+    this.mask = false;
   }
 
   //renders molecules to screen by creating ellipses using the position and radius above
@@ -79,9 +79,9 @@ class Molecule {
 
   step() {
 
-    (this.pos.x >= width-300 - this.radius*2 || this.pos.x < this.radius*2) ?
+    (this.pos.x >= width - this.radius*2 || this.pos.x < this.radius*2) ?
     this.velocity.x *= -1: null;
-
+    console.log(width - this.radius*2);
     (this.pos.y >= (height-300) - (this.radius*2) || this.pos.y < 0 + (this.radius*2)) ?
     this.velocity.y *= -1: null;
 

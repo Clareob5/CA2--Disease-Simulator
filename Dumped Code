@@ -1,0 +1,307 @@
+
+
+// } else if (probability > 0.9) {
+//   molecules.splice(molecule.index, 1, new Dead({
+//     i: molecule.index,
+//     px: molecule.pos.x,
+//     py: molecule.pos.y,
+//     vx: molecule.velocity.x,
+//     vy: molecule.velocity.y
+//   }));
+//   let count = random();
+//   if(count > 0.2){
+//     molecules.splice(molA.index, 1, new Recovered({
+//       i: molB.index,
+//       px: molB.pos.x,
+//       py: molB.pos.y,
+//       vx: molB.velocity.x,
+//       vy: molB.velocity.y
+//     }));
+//   }
+// }else if(molA.constructor.name == "Infected"){
+// let count = random();
+// if(count > 0.2){
+//   molecules.splice(molA.index, 1, new Recovered({
+//     i: molA.index,
+//     px: molA.pos.x,
+//     py: molA.pos.y,
+//     vx: molA.velocity.x,
+//     vy: molA.velocity.y
+//   }));
+// }
+// }
+// }
+
+// if (probability < 0.88) {
+//   molecules.splice(molecule.index, 1, new Dead({
+//     i: molecule.index,
+//     px: molecule.pos.x,
+//     py: molecule.pos.y,
+//     vx: molecule.velocity.x,
+//     vy: molecule.velocity.y
+//   }));
+// } else if (frameCount > molecule.birth + oneWeek && molecule.status == "infectedS") {
+//   if (probability < 0.4) { //this probability was taken from reading but it isn't accurate
+//     molecules.splice(molecule.index, 1, new Recovered({
+//       i: molecule.index,
+//       px: molecule.pos.x,
+//       py: molecule.pos.y,
+//       vx: molecule.velocity.x,
+//       vy: molecule.velocity.y
+//     }));
+//   } else if(probability < 0.4){
+//     molecule.status = "ICU"
+//   }
+//
+// } else{
+//   molecule.status = "ICU"
+//   console.log(molecule.status);
+//
+// }
+// else if (frameCount > molecule.birth + oneWeek * 2) {
+//   let probability = random();
+//   if (probability < 0.5) {
+//     molecules.splice(molecule.index, 1, new Recovered({
+//       i: molecule.index,
+//       px: molecule.pos.x,
+//       py: molecule.pos.y,
+//       vx: molecule.velocity.x,
+//       vy: molecule.velocity.y
+//     }));
+//   } else if (probability > 0.5 && probability < 0.8) {
+//     molecule.status = "ICU"
+//     console.log(molecule.status);
+//
+//   } else if (probability > 0.8) {
+//     molecules.splice(molecule.index, 1, new Dead({
+//       i: molecule.index,
+//       px: molecule.pos.x,
+//       py: molecule.pos.y,
+//       vx: molecule.velocity.x,
+//       vy: molecule.velocity.y
+//     }));
+//     console.log("DIED");
+//   } else {
+//     console.log("Still Infected");
+//   }
+//
+// } else if (frameCount > molecule.birth + oneWeek * 6) {
+//   let probability = random();
+//   if (probability < 0.2) {
+//     molecules.splice(molecule.index, 1, new Recovered({
+//       i: molecule.index,
+//       px: molecule.pos.x,
+//       py: molecule.pos.y,
+//       vx: molecule.velocity.x,
+//       vy: molecule.velocity.y
+//     }));
+//   } else {
+//     molecules.splice(molecule.index, 1, new Dead({
+//       i: molecule.index,
+//       px: molecule.pos.x,
+//       py: molecule.pos.y,
+//       vx: molecule.velocity.x,
+//       vy: molecule.velocity.y
+//     }));
+//     console.log('dead');
+//
+//   }
+// }
+//////////Suseptible code bit/////////////
+// if (molA.status = "ICU" && molA.birth + 400 > frameCount) {
+//   molecules.splice(molA.index, 1, new Dead({
+//     i: molA.index,
+//     px: molA.pos.x,
+//     py: molA.pos.y,
+//     vx: molA.velocity.x,
+//     vy: molA.velocity.y
+//   }));
+//   console.log("molA is dead")
+// }
+
+function recoverRate4w(molecule) {
+
+  if (frameCount > molecule.birth + oneWeek * 2) {
+    let probability = random();
+    if (molecule.status == "Infected") {
+      if (probability < 0.9) { //0.9 of population
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.9 && probability < 0.98) { //0.08 0f the population
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        molecule.status = "ICU"
+      }
+    } else if (molecule.status == "ICU" && molecule.age < 60) {
+      if (probability < 0.80) {
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.80 && probability < 0.95) { //15% of the population
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        //console.log("still infected");
+      }
+    } else if (molecule.status == "ICU" && molecule.age > 60) {
+      if (probability < 0.85) {
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.80 && probability < 0.10) { //10% of the population above 60
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        //console.log("still infected");
+      }
+
+    } else if (molecule.status == "InfectedS") { //median death rate for suseptible is 80
+      if (molecule.age < 80) {
+        if (probability <= 0.6) { //not accurate just calculated based on my reading
+          molecules.splice(molecule.index, 1, new Recovered({
+            i: molecule.index,
+            px: molecule.pos.x,
+            py: molecule.pos.y,
+            vx: molecule.velocity.x,
+            vy: molecule.velocity.y
+          }));
+        } else if (probability > 0.6 && (probability <= 0.7)) {
+          molecule.status = "ICU"
+        } else {
+          molecules.splice(molecule.index, 1, new Dead({
+            i: molecule.index,
+            px: molecule.pos.x,
+            py: molecule.pos.y,
+            vx: molecule.velocity.x,
+            vy: molecule.velocity.y
+          }));
+        }
+      }
+    }
+  } else if (frameCount > molecule.birth + oneWeek * obj.weeksOfSimulation) {
+    let probability = random();
+    if (molecule.status == "Infected") {
+      if (probability < 0.7) { //0.7 of population - probability of survival drops
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.9 && probability < 1) { //0.1 chance of dying increses
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        molecule.status = "ICU"
+      }
+    } else if (molecule.status == "ICU" && molecule.age < 60) {
+      if (probability < 0.6) { //reducing probability by 20%
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.80 && probability < 0.95) { //15% of the population
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        //console.log("still infected");
+      }
+    } else if (molecule.status == "ICU" && molecule.age > 60) {
+      if (probability < 0.9) { //probabiltiy of dying increases
+        molecules.splice(molecule.index, 1, new Dead({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else if (probability > 0.9 && probability < 0.95) { //5% of the population above 60
+        molecules.splice(molecule.index, 1, new Recovered({
+          i: molecule.index,
+          px: molecule.pos.x,
+          py: molecule.pos.y,
+          vx: molecule.velocity.x,
+          vy: molecule.velocity.y
+        }));
+      } else {
+        //console.log("still infected");
+      }
+
+    } else if (molecule.status == "InfectedS") { //median death rate for suseptible is 80
+      if (molecule.age < 80) {
+        if (probability <= 0.4) { //not accurate just calculated based on my reading - drop by 20%
+          molecules.splice(molecule.index, 1, new Recovered({
+            i: molecule.index,
+            px: molecule.pos.x,
+            py: molecule.pos.y,
+            vx: molecule.velocity.x,
+            vy: molecule.velocity.y
+          }));
+        } else if (probability > 0.4 && (probability <= 0.6)) {
+          molecule.status = "ICU"
+        } else {
+          molecules.splice(molecule.index, 1, new Dead({
+            i: molecule.index,
+            px: molecule.pos.x,
+            py: molecule.pos.y,
+            vx: molecule.velocity.x,
+            vy: molecule.velocity.y
+          }));
+        }
+      }
+    }
+  } else if ((frameCount > (molecule.birth + oneWeek * 6)) && molecule.status == "ICU") { //if you are in ICU for six weeks you have a very high chance of dying
+    if (probability < 0.92) {
+      molecules.splice(molecule.index, 1, new Dead({
+        i: molecule.index,
+        px: molecule.pos.x,
+        py: molecule.pos.y,
+        vx: molecule.velocity.x,
+        vy: molecule.velocity.y
+      }));
+    }
+  }
+}
