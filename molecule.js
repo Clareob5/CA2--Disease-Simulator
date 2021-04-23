@@ -3,9 +3,10 @@ class Molecule {
   constructor({i, px=200, py=200,vx=random(1.5,-1.5),vy=random(1.5,-1.5)}) {
     this.pos = createVector(px, py); //random position
     this.velocity = createVector(vx, vy); //random speed
-    this.radius = 8; //set radius
+    this.radius = 6; //set radius
     this.color = color(0,255,0); //default colour
     this.index = i; //index of molecule
+    this.mask = false;
   }
 
   //renders molecules to screen by creating ellipses using the position and radius above
@@ -13,7 +14,7 @@ class Molecule {
     noStroke()
     fill(this.color);
     ellipse(this.pos.x, this.pos.y, this.radius * 2, this.radius * 2);
-    fill(0);
+    fill(obj.textColor);
     (obj.showText) ? (
       textSize(16),
       textAlign(CENTER),
@@ -42,8 +43,8 @@ class Molecule {
       let dvx = dVector * normalX;
       let dvy = dVector * normalY;
 
-      dvx = constrain(dvx, -2, 2)
-      dvy = constrain(dvy, -2, 2)
+      dvx = constrain(dvx, -1.5, 1.5)
+      dvy = constrain(dvy, -1.5, 1.5)
 
       this.velocity.x -= dvx;
       this.velocity.y -= dvy;
@@ -64,6 +65,7 @@ class Molecule {
     // Here we thake away the calculated distance from the current pos
     let moveX = cos(rHeading) * rDist;
     let moveY = sin(rHeading) * rDist;
+    //console.log(moveX);
 
     this.pos.x -= moveX;
     this.pos.y -= moveY;
@@ -75,24 +77,12 @@ class Molecule {
     //console.log(`this index = ${this.index} Position in separate = ${this.pos.x}`);
   }
 
-  infect(_ball) {
-
-  }
-
-  // changeColor() {
-  //   this.currentColor = this.intersectingColor;
-  // }
-  //
-  // reset() {
-  //   this.currentColor = this.color;
-  // }
-
   step() {
 
-    (this.pos.x >= width - (this.radius) || this.pos.x < 0 + (this.radius)) ?
+    (this.pos.x >= width - this.radius*2 || this.pos.x < this.radius*2) ?
     this.velocity.x *= -1: null;
-
-    (this.pos.y >= (height-300) - (this.radius) || this.pos.y < 0 + (this.radius)) ?
+    console.log(width - this.radius*2);
+    (this.pos.y >= (height-300) - (this.radius*2) || this.pos.y < 0 + (this.radius*2)) ?
     this.velocity.y *= -1: null;
 
     this.pos.x += this.velocity.x;
